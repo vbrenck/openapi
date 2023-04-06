@@ -14,7 +14,18 @@ paths:
       tags:
         - "Characters"
       description: Retrieves a paginated list of available characters
-      operationId: GetAllCharaters
+      operationId: GetAllCharacters
+      parameters:
+        - name: page
+          in: query
+          description: "The page number to get. Default: 1"
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: "The number of items per page. Default: 50"
+          schema:
+            type: integer
       responses:
         "200":
           description: Successfully returned a list of characters
