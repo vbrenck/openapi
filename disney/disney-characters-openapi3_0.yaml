@@ -1,17 +1,33 @@
 openapi: 3.0.0
 info:
   version: 1.0.0
-  title: 'Disney Characters API'
-  description: 'An API to get information on Disney characters. The original docs can be accessed on https://disneyapi.dev/docs and additional specs are on https://github.com/ManuCastrillonM/disney-api'
+  title: "Disney Characters API"
+  description: "An API to get information on Disney characters. The original docs can be accessed on https://disneyapi.dev/docs and additional specs are on https://github.com/ManuCastrillonM/disney-api"
+  contact:
+    url: "https://github.com/manuCastrillonM"
 servers:
-- url: https://api.disneyapi.dev
-  description: 'Main server'
+  - url: https://api.disneyapi.dev
+    description: "Main server"
 paths:
   /characters:
     get:
+      tags:
+        - "Characters"
       description: Retrieves a paginated list of available characters
+      operationId: GetAllCharacters
+      parameters:
+        - name: page
+          in: query
+          description: "The page number to get. Default: 1"
+          schema:
+            type: integer
+        - name: pageSize
+          in: query
+          description: "The number of items per page. Default: 50"
+          schema:
+            type: integer
       responses:
-        '200':
+        "200":
           description: Successfully returned a list of characters
           content:
             application/json:
@@ -72,30 +88,33 @@ paths:
                           description: API URL for the character's detail.
   /character:
     get:
+      tags:
+        - "Characters"
       description: Searches for a character based on query parameters
+      operationId: GetCharacterByQueryParameters
       parameters:
-      - name: name
-        in: query
-        schema:
-          type: string
-      - name: films
-        in: query
-        schema:
-          type: string
-      - name: tvShows
-        in: query
-        schema:
-          type: string
-      - name: parkAttractions
-        in: query
-        schema:
-          type: string
-      - name: videoGames
-        in: query
-        schema:
-          type: string
+        - name: name
+          in: query
+          schema:
+            type: string
+        - name: films
+          in: query
+          schema:
+            type: string
+        - name: tvShows
+          in: query
+          schema:
+            type: string
+        - name: parkAttractions
+          in: query
+          schema:
+            type: string
+        - name: videoGames
+          in: query
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: Successfully returned a list of characters
           content:
             application/json:
@@ -111,7 +130,7 @@ paths:
                       properties:
                         _id:
                           type: integer
-                          description: Character's ID.                        
+                          description: Character's ID.
                         films:
                           type: array
                           description: The films in which the character participates.
@@ -158,16 +177,19 @@ paths:
                           description: API URL for the character's detail.
   /characters/{id}:
     get:
-      description: Retrieves information about a single character based on its id.
+      tags:
+        - "Characters"
+      description: Retrieves information about a single character based on its id.\
+      operationId: GetChracterById
       parameters:
-      - name: id
-        in: path
-        required: true
-        description: The character's id
-        schema:
-          type: integer
+        - name: id
+          in: path
+          required: true
+          description: The character's id
+          schema:
+            type: integer
       responses:
-        '200':
+        "200":
           description: Successfully returned a character
           content:
             application/json:
@@ -221,4 +243,5 @@ paths:
                   url:
                     type: string
                     description: API URL for the character's detail.
-                      
+tags:
+  - name: Characters
