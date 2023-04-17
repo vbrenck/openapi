@@ -1,0 +1,63 @@
+openapi: '3.0.1'
+info:
+  title: Stranger Things Quotes
+  description: A simple API to retrieve some quotes of Stranger Things.
+  version: 1.0.0
+  license:
+    name: MIT
+    url: https://github.com/shadowoff09/strangerthings-quotes/blob/main/LICENSE
+  termsOfService: https://github.com/shadowoff09/strangerthings-quotes/blob/main/README.md
+  contact:
+    name: Diogo Gaspar
+    url: https://github.com/shadowoff09
+externalDocs:
+  description: Original Github Repo
+  url: https://github.com/shadowoff09/strangerthings-quotes/blob/main/README.md
+servers:
+ - url: https://strangerthings-quotes.vercel.app
+paths:
+  /api/quotes:
+    get:
+      summary: Gets a random quote.
+      operationId: getRandomQuote
+      description: 'Gets a random quote from Stranger Things.'
+      responses:
+        '200':
+          description: List of objects containing a single quote
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/StrangerThingsQuotes'
+  /api/quotes/{number}:
+    get:
+      summary: Returns an array with {number} quotes e.g. GET /api/quotes/5.
+      operationId: getNumberOfQuotes
+      parameters:
+        - name: number
+          in: path
+          description: Number of quotes to return
+          required: true
+          schema:
+            type: integer
+          example: 5
+      responses:
+        '200':
+          description: List of objects containing the quote and its author.
+          content:
+            application/json: 
+              schema:
+                $ref: '#/components/schemas/StrangerThingsQuotes'
+components:
+  schemas:
+    StrangerThingsQuotes:
+      type: array
+      items:
+        $ref: '#/components/schemas/Quotes'
+    Quotes:
+      type: object
+      properties:
+        quote:
+          type: string
+        author:
+          type: string
+  
