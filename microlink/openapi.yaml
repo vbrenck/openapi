@@ -1,0 +1,155 @@
+openapi: 3.0.3
+info:
+  title: Microlink
+  description: An API to extract information from a given URL. Microlink is a fast, scalable, and reliable high-level API to control a headless browser built for businesses and developers. Proudly open source. It can be used to extract metadata from a given URL, allowing to get the website's screenshot, playable audio tracks, logo, favicon, convert it to PDF and other operations depending on the parameters. 
+  version: 0.1.0
+servers:
+  - url: https://api.microlink.io
+    description: Base URL endpoint. The free plan allows 50 requests per day. 
+paths:
+  /:
+    get:
+      tags:
+        - Main
+      description: Retrieves information of a given website informed in the `url` parameter. Additional parameters (like `pdf`, `audio` or `screenshot`) can be included depending on the desired operation. 
+      operationId: getInfoFromURL
+      parameters:
+        - name: url
+          in: query
+          description: The target url from which the API will extract information. IT MUST BE FULLY FORMATTED (protocol://domain-name.top-level-domain/path). Not including http:// or https:// for example will result in failure.
+          required: true
+          schema:
+            type: string
+        - name: screenshot
+          in: query
+          description: Inform true to get a screenshot from the target website passed in the `url` parameter. When it's enabled, a new `screenshot` data field will be part of the response payload. You can configure different options for the screenshot using the `element`, `fullPage`, `omitBackground` or `type` parameters.
+          required: false
+          schema:
+            type: boolean
+        - name: element
+          in: query
+          description: Can be used in conjunction with the `screenshot` parameter. It captures the DOM element matching the given CSS selector for the screenshot over the target url.
+          required: false
+          schema:
+            type: string
+        - name: fullPage
+          in: query
+          description: Can be used in conjunction with the `screenshot` parameter. It takes a full scrollable page screenshot over the target url. The response time could be slower since the browser has to wait more elements before taking the screenshot.
+          required: false
+          schema:
+            type: boolean
+        - name: omitBackground
+          in: query
+          description: Can be used in conjunction with the `screenshot` parameter. It omits the white background for the screenshot over the target url.
+          required: false
+          schema:
+            type: boolean
+        - name: type
+          in: query
+          description: Can be used in conjunction with the `screenshot` parameter. It specifies the screenshot file type for the screenshot over the target url. Defaults to 'png', but also accepts 'jpeg'.
+          required: false
+          schema:
+            type: string
+            enum:
+            - png
+            - jpeg
+        - name: palette
+          in: query
+          description: It enables color schema information over the images data field detected over the target url. Additional fields will be added per each image detected in the payload. *palette* - A collection of hexadecimal colors from most dominant color to least. *background_color* - The best color with good WCAG contrast ratio that can be used as background color representation of the image. *color* - The best color overlayed over background_color. *alternative_color* - It will be the second best color. If there are only two colors parsed, it will default to color.
+          required: false
+          schema:
+            type: boolean
+        - name: pdf
+          in: query
+          description: It generates a PDF over the target url. When it's enabled, a new pdf data field will be part of the response payload. You can configure different specific options by passing additional parameters, such as `format`, `landscape`, `scale` or `pageRanges`.
+          required: false
+          schema:
+            type: boolean
+        - name: format
+          in: query
+          description: Can be used in conjunction with the `pdf` parameter. It specifies the paper format for the pdf over the target url. Defaults to 'A4'.
+          required: false
+          schema:
+            type: string
+            enum:
+            - Letter
+            - Legal
+            - Tabloid
+            - Ledger
+            - A0
+            - A1
+            - A2
+            - A3
+            - A4
+            - A5
+            - A6
+        - name: landscape
+          in: query
+          description: Can be used in conjunction with the `pdf` parameter. It sets landscape orientation for the pdf over the target url.
+          required: false
+          schema:
+            type: boolean
+        - name: scale
+          in: query
+          description: Can be used in conjunction with the `pdf` parameter. It sets the scale for the pdf over the target url. Scale amount must be between 0.1 and 2. 
+          required: false
+          schema:
+            type: number
+        - name: pageRanges
+          in: query
+          description: Can be used in conjunction with the `pdf` parameter. It specifies the page range for generating the pdf over the target url. Any interval can be defined, such as, '1-5, 8, 11-13'. If you want to print just one page, specify it as range, e.g., '1-1'. 
+          required: false
+          schema:
+            type: string
+        - name: audio
+          in: query
+          description: It enables audio source detection over the target url. The audio source URL detected will be in a browser-friendly format to be possible embedded it.
+          required: false
+          schema:
+            type: boolean
+        - name: video
+          in: query
+          description: It enables video source detection over the target url. The video source URL detected will be in a browser-friendly format to be possible embedded it.
+          required: false
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnimalFullResponse'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    AnimalFullResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+        status code:
+          type: number
+        headers:
+          type: object
+      description: Response object for a regular query
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Error message
+      description: Error object
+externalDocs:
+  description: You can find the official documentation with more info here
+  url: https://microlink.io/docs/api/getting-started/overview
