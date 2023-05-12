@@ -119,7 +119,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AnimalFullResponse'
+                $ref: '#/components/schemas/Response'
         default:
           description: Unexpected error
           content:
@@ -128,7 +128,7 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    AnimalFullResponse:
+    Response:
       type: object
       properties:
         status:
